@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MortgageData.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="InterestRepayment">
+          <Key>
+            <PropertyRef Name="InterestRepaymentId" />
+          </Key>
+          <Property Name="InterestRepaymentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InterestRepaymentName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Mortgage">
+          <Key>
+            <PropertyRef Name="MortgageId" />
+          </Key>
+          <Property Name="MortgageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="MortgageTypeId" Type="int" Nullable="false" />
+          <Property Name="InterestRepaymentId" Type="int" Nullable="false" />
+          <Property Name="EffectiveStartDate" Type="datetime" Nullable="false" />
+          <Property Name="EffectiveEndDate" Type="datetime" Nullable="false" />
+          <Property Name="TermsInMonths" Type="int" Nullable="false" />
+          <Property Name="CancellationFee" Type="decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="EstablishmentFee" Type="decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="SchemaIdentifier" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MortgageType">
+          <Key>
+            <PropertyRef Name="MortgageTypeId" />
+          </Key>
+          <Property Name="MortgageTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MortgageTypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_InterestRepayment_Mortgage">
+          <End Role="InterestRepayment" Type="Self.InterestRepayment" Multiplicity="1" />
+          <End Role="Mortgage" Type="Self.Mortgage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InterestRepayment">
+              <PropertyRef Name="InterestRepaymentId" />
+            </Principal>
+            <Dependent Role="Mortgage">
+              <PropertyRef Name="InterestRepaymentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MortgageType_Mortgage">
+          <End Role="MortgageType" Type="Self.MortgageType" Multiplicity="1" />
+          <End Role="Mortgage" Type="Self.Mortgage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MortgageType">
+              <PropertyRef Name="MortgageTypeId" />
+            </Principal>
+            <Dependent Role="Mortgage">
+              <PropertyRef Name="MortgageTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MortgageDataStoreContainer">
+          <EntitySet Name="InterestRepayment" EntityType="Self.InterestRepayment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mortgage" EntityType="Self.Mortgage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MortgageType" EntityType="Self.MortgageType" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_InterestRepayment_Mortgage" Association="Self.FK_InterestRepayment_Mortgage">
+            <End Role="InterestRepayment" EntitySet="InterestRepayment" />
+            <End Role="Mortgage" EntitySet="Mortgage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MortgageType_Mortgage" Association="Self.FK_MortgageType_Mortgage">
+            <End Role="MortgageType" EntitySet="MortgageType" />
+            <End Role="Mortgage" EntitySet="Mortgage" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MortgageData" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="MortgageDataContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="InterestRepayments" EntityType="MortgageData.InterestRepayment" />
+          <EntitySet Name="Mortgages" EntityType="MortgageData.Mortgage" />
+          <EntitySet Name="MortgageTypes" EntityType="MortgageData.MortgageType" />
+          <AssociationSet Name="FK_InterestRepayment_Mortgage" Association="MortgageData.FK_InterestRepayment_Mortgage">
+            <End Role="InterestRepayment" EntitySet="InterestRepayments" />
+            <End Role="Mortgage" EntitySet="Mortgages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MortgageType_Mortgage" Association="MortgageData.FK_MortgageType_Mortgage">
+            <End Role="MortgageType" EntitySet="MortgageTypes" />
+            <End Role="Mortgage" EntitySet="Mortgages" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="InterestRepayment">
+          <Key>
+            <PropertyRef Name="InterestRepaymentId" />
+          </Key>
+          <Property Name="InterestRepaymentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InterestRepaymentName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Mortgages" Relationship="MortgageData.FK_InterestRepayment_Mortgage" FromRole="InterestRepayment" ToRole="Mortgage" />
+        </EntityType>
+        <EntityType Name="Mortgage">
+          <Key>
+            <PropertyRef Name="MortgageId" />
+          </Key>
+          <Property Name="MortgageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MortgageTypeId" Type="Int32" Nullable="false" />
+          <Property Name="InterestRepaymentId" Type="Int32" Nullable="false" />
+          <Property Name="EffectiveStartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EffectiveEndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TermsInMonths" Type="Int32" Nullable="false" />
+          <Property Name="CancellationFee" Type="Decimal" Nullable="false" Precision="18" Scale="5" />
+          <Property Name="EstablishmentFee" Type="Decimal" Nullable="false" Precision="18" Scale="5" />
+          <Property Name="SchemaIdentifier" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="InterestRepayment" Relationship="MortgageData.FK_InterestRepayment_Mortgage" FromRole="Mortgage" ToRole="InterestRepayment" />
+          <NavigationProperty Name="MortgageType" Relationship="MortgageData.FK_MortgageType_Mortgage" FromRole="Mortgage" ToRole="MortgageType" />
+        </EntityType>
+        <EntityType Name="MortgageType">
+          <Key>
+            <PropertyRef Name="MortgageTypeId" />
+          </Key>
+          <Property Name="MortgageTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MortgageTypeName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Mortgages" Relationship="MortgageData.FK_MortgageType_Mortgage" FromRole="MortgageType" ToRole="Mortgage" />
+        </EntityType>
+        <Association Name="FK_InterestRepayment_Mortgage">
+          <End Type="MortgageData.InterestRepayment" Role="InterestRepayment" Multiplicity="1" />
+          <End Type="MortgageData.Mortgage" Role="Mortgage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InterestRepayment">
+              <PropertyRef Name="InterestRepaymentId" />
+            </Principal>
+            <Dependent Role="Mortgage">
+              <PropertyRef Name="InterestRepaymentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MortgageType_Mortgage">
+          <End Type="MortgageData.MortgageType" Role="MortgageType" Multiplicity="1" />
+          <End Type="MortgageData.Mortgage" Role="Mortgage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MortgageType">
+              <PropertyRef Name="MortgageTypeId" />
+            </Principal>
+            <Dependent Role="Mortgage">
+              <PropertyRef Name="MortgageTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MortgageDataStoreContainer" CdmEntityContainer="MortgageDataContext">
+          <EntitySetMapping Name="InterestRepayments">
+            <EntityTypeMapping TypeName="MortgageData.InterestRepayment">
+              <MappingFragment StoreEntitySet="InterestRepayment">
+                <ScalarProperty Name="InterestRepaymentName" ColumnName="InterestRepaymentName" />
+                <ScalarProperty Name="InterestRepaymentId" ColumnName="InterestRepaymentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mortgages">
+            <EntityTypeMapping TypeName="MortgageData.Mortgage">
+              <MappingFragment StoreEntitySet="Mortgage">
+                <ScalarProperty Name="SchemaIdentifier" ColumnName="SchemaIdentifier" />
+                <ScalarProperty Name="EstablishmentFee" ColumnName="EstablishmentFee" />
+                <ScalarProperty Name="CancellationFee" ColumnName="CancellationFee" />
+                <ScalarProperty Name="TermsInMonths" ColumnName="TermsInMonths" />
+                <ScalarProperty Name="EffectiveEndDate" ColumnName="EffectiveEndDate" />
+                <ScalarProperty Name="EffectiveStartDate" ColumnName="EffectiveStartDate" />
+                <ScalarProperty Name="InterestRepaymentId" ColumnName="InterestRepaymentId" />
+                <ScalarProperty Name="MortgageTypeId" ColumnName="MortgageTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="MortgageId" ColumnName="MortgageId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MortgageTypes">
+            <EntityTypeMapping TypeName="MortgageData.MortgageType">
+              <MappingFragment StoreEntitySet="MortgageType">
+                <ScalarProperty Name="MortgageTypeName" ColumnName="MortgageTypeName" />
+                <ScalarProperty Name="MortgageTypeId" ColumnName="MortgageTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
